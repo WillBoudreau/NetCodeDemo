@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
 
+    public override void OnNetworkSpawn()
+    {
+        if(IsOwner)
+        {
+            Vector3 spawnPosition = new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
+            transform.position = spawnPosition;
+        }
+    }
     private void Update()
     {
         MovePlayer();
     }
     void MovePlayer()
     {
+        if(!IsOwner)
+        {
+            return;
+        }
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
