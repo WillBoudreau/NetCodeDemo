@@ -32,10 +32,6 @@ public class NetworkUI : NetworkBehaviour
             var connectedClients = NetworkManager.Singleton.ConnectedClients;
             Debug.Log("Number of Connected Clients " + connectedClients.Count);
         }
-        else
-        {
-            Debug.Log("This function can only be accessed on the server");
-        }
         playersCountText.text = $"Players: {playersCount.Value}";
         if(!IsServer)
         {
