@@ -40,4 +40,19 @@ public class PlayerMovement : NetworkBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
     }
+    void OnTriggerEnter()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("E key pressed");
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1f);
+            foreach(Collider hitCollider in hitColliders)
+            {
+                if(hitCollider.gameObject.tag == "Box")
+                {
+                    hitCollider.gameObject.transform.SetParent(this.transform, true);
+                }
+            }
+        }
+    }
 }
