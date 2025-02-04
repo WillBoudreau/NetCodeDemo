@@ -1276,6 +1276,7 @@ GameObject:
   - component: {fileID: 1375737349}
   - component: {fileID: 1375737348}
   - component: {fileID: 1375737350}
+  - component: {fileID: 1375737351}
   - component: {fileID: 1375737347}
   - component: {fileID: 1375737346}
   m_Layer: 5
@@ -1377,34 +1378,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1375737345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08112e4359296eb4d8ebf63d5cfce6df, type: 3}
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NetworkConfig:
-    ProtocolVersion: 0
-    NetworkTransport: {fileID: 1196865794}
-    PlayerPrefab: {fileID: 375686671547309559, guid: 371ea6a068d64484da228c4aba4a5de6, type: 3}
-    Prefabs:
-      NetworkPrefabsLists:
-      - {fileID: 0}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
-    ConnectionData: 
-    EnableTimeResync: 0
-    TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
-    ForceSamePrefabs: 1
-    RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
-    RpcHashSize: 0
-    LoadSceneTimeOut: 120
-    SpawnTimeout: 10
-    EnableNetworkLogs: 1
-    OldPrefabList: []
-  RunInBackground: 1
-  LogLevel: 1
+  GlobalObjectIdHash: 2108410121
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &1375737351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375737345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334c97733a5127a4a90140e65719069f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   hostButton: {fileID: 2118056659}
   clientButton: {fileID: 1250063376}
   playersCountText: {fileID: 581060278}
