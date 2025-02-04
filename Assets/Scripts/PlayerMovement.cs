@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkObject
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
@@ -13,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void MovePlayer()
     {
+        if (!IsOwner) return;
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
