@@ -16,6 +16,10 @@ public class NetworkUI : NetworkBehaviour
 
     void Awake()
     {
+        if (IsClient || IsServer)
+        {
+            NetworkManager.Shutdown();
+        }
         hostButton.onClick.AddListener(() => 
         {
             NetworkManager.Singleton.StartHost();
