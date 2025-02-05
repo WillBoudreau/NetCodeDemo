@@ -9,6 +9,7 @@ public class NetworkUI : NetworkBehaviour
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
+    [SerializeField] private Button serverButton;
     [SerializeField] private TextMeshProUGUI playersCountText;
 
     private NetworkVariable<int> playersCount = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone);
@@ -22,6 +23,10 @@ public class NetworkUI : NetworkBehaviour
         clientButton.onClick.AddListener(() => 
         {
             NetworkManager.Singleton.StartClient();
+        });
+        serverButton.onClick.AddListener(() => 
+        {
+            NetworkManager.Singleton.StartServer();
         });
     }
 
