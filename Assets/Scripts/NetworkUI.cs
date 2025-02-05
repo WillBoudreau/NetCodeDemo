@@ -24,23 +24,24 @@ public class NetworkUI : NetworkBehaviour
 
     void Awake()
     {
-        ipAddress = "0.0.0.0";
+        //ipAddress = "0.0.0.0";
         if (IsClient || IsServer)
         {
             NetworkManager.Shutdown();
         }
         hostButton.onClick.AddListener(() => 
         {
-            NetworkManager.Singleton.StartHost();
             GetLocalIPAddress();
+            NetworkManager.Singleton.StartHost();
         });
         clientButton.onClick.AddListener(() => 
         {
-            NetworkManager.Singleton.StartClient();
             SetIpAddress();
+            NetworkManager.Singleton.StartClient();
         });
         serverButton.onClick.AddListener(() => 
         {
+            GetLocalIPAddress();
             NetworkManager.Singleton.StartServer();
         });
     }
@@ -77,8 +78,11 @@ public class NetworkUI : NetworkBehaviour
     // ONLY FOR CLIENT SIDE
     public void SetIpAddress()
     {
+        ipAddress = ip.text;
         transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.ConnectionData.Address = ipAddress;
+        Debug.Log(transport.ConnectionData.Address);
+        Debug.Log(ipAddress);
     }
 
 }
