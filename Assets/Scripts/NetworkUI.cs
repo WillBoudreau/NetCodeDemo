@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 using TMPro;
+using System.Net.Sockets;
+using System.Net;
+using Unity.Netcode.Transports.UTP;
 
 public class NetworkUI : NetworkBehaviour
 {
@@ -11,11 +14,17 @@ public class NetworkUI : NetworkBehaviour
     [SerializeField] private Button clientButton;
     [SerializeField] private Button serverButton;
     [SerializeField] private TextMeshProUGUI playersCountText;
+    [SerializeField] TextMeshProUGUI ipAddressText;
+    [SerializeField] TMP_InputField ip;
+
+    [SerializeField] string ipAddress;
+    [SerializeField] UnityTransport transport;
 
     private NetworkVariable<int> playersCount = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone);
 
     void Awake()
     {
+        ipAddress = "0.0.0.0";
         if (IsClient || IsServer)
         {
             NetworkManager.Shutdown();
@@ -23,10 +32,12 @@ public class NetworkUI : NetworkBehaviour
         hostButton.onClick.AddListener(() => 
         {
             NetworkManager.Singleton.StartHost();
+            GetLocalIPAddress();
         });
         clientButton.onClick.AddListener(() => 
         {
             NetworkManager.Singleton.StartClient();
+            SetIpAddress();
         });
         serverButton.onClick.AddListener(() => 
         {
@@ -36,15 +47,6 @@ public class NetworkUI : NetworkBehaviour
 
     void Update()
     {
-        if(NetworkManager.Singleton.IsServer)
-        {
-            var connectedClients = NetworkManager.Singleton.ConnectedClients;
-            Debug.Log("Number of Connected Clients " + connectedClients.Count);
-        }
-        else
-        {
-            Debug.Log("This function can only be accessed on the server");
-        }
         playersCountText.text = $"Players: {playersCount.Value}";
         if(!IsServer)
         {
@@ -52,4 +54,31 @@ public class NetworkUI : NetworkBehaviour
         }
         playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
     }
+    /* Gets the Ip Address of your connected network and
+	shows on the screen in order to let other players join
+	by inputing that Ip in the input field */
+    // ONLY FOR HOST SIDE 
+    public string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                ipAddressText.text = ip.ToString();
+                ipAddress = ip.ToString();
+                return ip.ToString();
+            }
+        }
+        throw new System.Exception("No network adapters with an IPv4 address in the system!");
+    }
+    /* Sets the Ip Address of the Connection Data in Unity Transport
+	to the Ip Address which was input in the Input Field */
+    // ONLY FOR CLIENT SIDE
+    public void SetIpAddress()
+    {
+        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.ConnectionData.Address = ipAddress;
+    }
+
 }
