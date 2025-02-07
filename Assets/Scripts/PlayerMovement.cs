@@ -7,7 +7,9 @@ public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
-
+    [SerializeField] private GameObject puck;
+    [SerializeField] private float PlayerMinDistPuck;
+    private PuckBehaviour puckScript;
     public override void OnNetworkSpawn()
     {
         if(IsOwner)
@@ -18,7 +20,10 @@ public class PlayerMovement : NetworkBehaviour
     }
     private void Update()
     {
+        puck = GameObject.FindGameObjectWithTag("Puck");
+        puckScript = GameObject.FindObjectOfType<PuckBehaviour>();
         MovePlayer();
+        Shoot();
     }
     void MovePlayer()
     {
@@ -55,4 +60,14 @@ public class PlayerMovement : NetworkBehaviour
             }
         }
     }
+    public void Shoot()
+    {
+        if(Vector3.Distance(transform.position, puck.transform.position) < PlayerMinDistPuck)
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                puckScript.ApplyForce(transform.forward);
+            }
+        }
+    } 
 }

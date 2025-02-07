@@ -12,7 +12,6 @@ public class NetworkUI : NetworkBehaviour
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
-    [SerializeField] private Button serverButton;
     [SerializeField] private TextMeshProUGUI playersCountText;
     [SerializeField] TextMeshProUGUI ipAddressText;
     [SerializeField] TMP_InputField ip;
@@ -38,11 +37,6 @@ public class NetworkUI : NetworkBehaviour
         {
             SetIpAddress();
             NetworkManager.Singleton.StartClient();
-        });
-        serverButton.onClick.AddListener(() => 
-        {
-            GetLocalIPAddress();
-            NetworkManager.Singleton.StartServer();
         });
     }
 
