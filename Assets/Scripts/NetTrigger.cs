@@ -14,7 +14,7 @@ public class NetTrigger : MonoBehaviour
 
     void Start()
     {
-        puck = GameObject.Find("Puck").GetComponent<PuckBehaviour>();
+        puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
         scoreTextHome.text = "Home: " + homeScore.ToString();
         scoreTextAway.text = "Away: " + awayScore.ToString();
         ScoreSound = GetComponent<AudioSource>();
@@ -25,10 +25,12 @@ public class NetTrigger : MonoBehaviour
         
     }
 
-    public void OnTriggerExit(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Puck" && this.gameObject.tag == "HomeNet")
         {
+            puck.ResetPuck();
+            ScoreSound.Play();
             awayScore++;
             scoreTextAway.text = "Away: " + awayScore.ToString();
             Debug.Log(awayScore);
