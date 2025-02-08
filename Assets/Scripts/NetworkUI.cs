@@ -10,34 +10,40 @@ using Unity.Netcode.Transports.UTP;
 
 public class NetworkUI : NetworkBehaviour
 {
-    [SerializeField] private Button hostButton;
-    [SerializeField] private Button clientButton;
     [SerializeField] private TextMeshProUGUI playersCountText;
     [SerializeField] TextMeshProUGUI ipAddressText;
     [SerializeField] TMP_InputField ip;
 
     [SerializeField] string ipAddress;
+    [SerializeField] TextMeshProUGUI errorText;
     [SerializeField] UnityTransport transport;
 
     private NetworkVariable<int> playersCount = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone);
 
     void Awake()
     {
+        errorText.text = "";
         //ipAddress = "0.0.0.0";
         if (IsClient || IsServer)
         {
             NetworkManager.Shutdown();
         }
-        hostButton.onClick.AddListener(() => 
-        {
-            GetLocalIPAddress();
-            NetworkManager.Singleton.StartHost();
-        });
-        clientButton.onClick.AddListener(() => 
-        {
-            SetIpAddress();
-            NetworkManager.Singleton.StartClient();
-        });
+    }
+    /// <summary>
+    /// Start the host
+    /// </summary>
+    public void StartHost()
+    {
+        GetLocalIPAddress();
+        NetworkManager.Singleton.StartHost();
+    }
+    /// <summary>
+    /// Start the Client
+    /// </summary>
+    public void StartClient()
+    {
+        SetIpAddress();
+        NetworkManager.Singleton.StartClient();
     }
 
     void Update()
@@ -60,7 +66,7 @@ public class NetworkUI : NetworkBehaviour
         {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
             {
-                ipAddressText.text = ip.ToString();
+                ipAddressText.text = "IP: " + ip.ToString();
                 ipAddress = ip.ToString();
                 return ip.ToString();
             }
@@ -73,6 +79,11 @@ public class NetworkUI : NetworkBehaviour
     public void SetIpAddress()
     {
         ipAddress = ip.text;
+        if(ip.text.Length == 0)
+        {
+            errorText.text = "Please enter a Valid IP Address";
+            return;
+        }
         transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.ConnectionData.Address = ipAddress;
         Debug.Log(transport.ConnectionData.Address);

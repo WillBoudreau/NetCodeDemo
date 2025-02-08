@@ -5,13 +5,35 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    public void LoadLevel (string lvl)
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private NetworkUI networkUI;
+
+    void Start()
     {
-        switch (lvl)
+        networkUI = FindObjectOfType<NetworkUI>();
+    }
+    /// <summary>
+    /// Load the level with the given name asynchronously
+    /// </summary>
+    public void LoadLevel(string lvl)
+    {
+        StartCoroutine(LoadLevelAsync(lvl));
+    }
+
+    private IEnumerator LoadLevelAsync(string lvl)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(lvl);
+
+        // Wait until the scene is fully loaded
+        while (!asyncLoad.isDone)
         {
-            case "Game":
-                
-                break;
+            yield return null;
+        }
+
+        if (lvl == "Game")
+        {
+            gameManager.DisableCamera();
+            networkUI.StartHost();
         }
     }
 }
