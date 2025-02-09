@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PuckBehaviour : MonoBehaviour
+public class PuckBehaviour : NetworkBehaviour
 {
    
     public float friction = 0.98f;    
     public float maxSpeed = 10f;        
     public float forceMultiplier = 2f; 
     public Vector3 startPosition;
+    public bool isMoving;
     private Rigidbody rb;
 
     void Start()
@@ -37,10 +39,31 @@ public class PuckBehaviour : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
-
-    public void ApplyForce(Vector3 direction)
+    [ServerRpc(RequireOwnership = false)]
+    public void ApplyForceServerRpc(Vector3 direction)
     {
         rb.AddForce(direction * forceMultiplier, ForceMode.Impulse);
+        ApplyForceClientRpc(direction);
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void ApplyForceClientRpc(Vector3 direction)
+    {
+        if(IsOwner)
+        {
+            rb.AddForce(direction * forceMultiplier, ForceMode.Impulse);
+        }
+    }
+    public void ApplyForce(Vector3 direction)
+    {
+        isMoving = true;
+        if (IsServer)
+        {
+            ApplyForceServerRpc(direction);
+        }
+        else if(IsClient)
+        {
+            ApplyForceClientRpc(direction);
+        }
     }
     public void ResetPuck()
     {

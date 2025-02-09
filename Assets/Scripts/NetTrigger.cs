@@ -14,7 +14,6 @@ public class NetTrigger : MonoBehaviour
 
     void Start()
     {
-        puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
         scoreTextHome.text = "Home: " + homeScore.ToString();
         scoreTextAway.text = "Away: " + awayScore.ToString();
         ScoreSound = GetComponent<AudioSource>();
@@ -22,7 +21,7 @@ public class NetTrigger : MonoBehaviour
 
     void Update()
     {
-        
+        puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
     }
 
     public void OnTriggerEnter(Collider other)

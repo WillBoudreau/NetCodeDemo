@@ -7,14 +7,14 @@ public class CameraBehavior : MonoBehaviour
     [SerializeField] private GameObject puck; // The puck object
     void Start()
     {
+    }
+    void Update()
+    {
         //If the puck is not set, find the puck
         if (puck == null)
         {
             puck = GameObject.FindGameObjectWithTag("Puck");
         }
-    }
-    void Update()
-    {
         if (puck != null)
         {
             Vector3 direction = puck.transform.position - transform.position;

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : NetworkBehaviour
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private NetworkUI networkUI;
+    public string levelToLoad;
 
     void Start()
     {
@@ -33,7 +35,15 @@ public class LevelManager : MonoBehaviour
         if (lvl == "Game")
         {
             gameManager.DisableCamera();
-            networkUI.StartHost();
+            levelToLoad = lvl;
+            if(!IsClient)
+            {
+                networkUI.StartHost();
+            }
+            else
+            {
+                networkUI.StartClient();
+            }
         }
     }
 }

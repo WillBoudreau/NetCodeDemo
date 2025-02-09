@@ -10,6 +10,7 @@ using Unity.Netcode.Transports.UTP;
 
 public class NetworkUI : NetworkBehaviour
 {
+    [SerializeField] private LevelManager levelManager;
     [SerializeField] private TextMeshProUGUI playersCountText;
     [SerializeField] TextMeshProUGUI ipAddressText;
     [SerializeField] TMP_InputField ip;

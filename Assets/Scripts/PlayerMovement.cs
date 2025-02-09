@@ -10,14 +10,17 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private GameObject puck;
     [SerializeField] private float PlayerMinDistPuck;
     private PuckBehaviour puckScript;
+
     public override void OnNetworkSpawn()
     {
-        if(IsOwner)
+        if (IsOwner)
         {
             Vector3 spawnPosition = new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
             transform.position = spawnPosition;
         }
+        this.GetComponent<NetworkObject>().SpawnWithOwnership(clientId: NetworkManager.Singleton.LocalClientId);
     }
+
     private void Update()
     {
         puck = GameObject.FindGameObjectWithTag("Puck");
@@ -25,12 +28,14 @@ public class PlayerMovement : NetworkBehaviour
         MovePlayer();
         Shoot();
     }
+
     void MovePlayer()
     {
-        if(!IsOwner)
+        if (!IsOwner)
         {
             return;
         }
+
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
@@ -39,35 +44,44 @@ public class PlayerMovement : NetworkBehaviour
 
         transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
 
-        if(movementDirection != Vector3.zero)
+        if (movementDirection != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
     }
-    void OnTriggerEnter()
+
+    void OnTriggerEnter(Collider other)
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (other.CompareTag("Box") && Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("E key pressed");
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1f);
-            foreach(Collider hitCollider in hitColliders)
-            {
-                if(hitCollider.gameObject.tag == "Box")
-                {
-                    hitCollider.gameObject.transform.SetParent(this.transform, true);
-                }
-            }
+            other.transform.SetParent(this.transform, true);
         }
     }
     public void Shoot()
     {
-        if(Vector3.Distance(transform.position, puck.transform.position) < PlayerMinDistPuck)
+        if (Vector3.Distance(transform.position, puck.transform.position) < PlayerMinDistPuck)
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                puckScript.ApplyForce(transform.forward);
+                ApplyForceServerRpc(transform.forward);
             }
         }
-    } 
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void ApplyForceServerRpc(Vector3 direction)
+    {
+        puckScript.ApplyForce(direction);
+        ApplyForceClientRpc(direction);
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void ApplyForceClientRpc(Vector3 direction)
+    {
+        if (IsOwner)
+        {
+            puckScript.ApplyForce(direction);
+        }
+    }
+
 }
