@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &14107897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1704,7 +1704,7 @@ GameObject:
   - component: {fileID: 1185961249}
   - component: {fileID: 1185961248}
   m_Layer: 5
-  m_Name: Text (TMP) (3)
+  m_Name: AwayScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1940,7 +1940,7 @@ GameObject:
   - component: {fileID: 1292188138}
   - component: {fileID: 1292188137}
   m_Layer: 5
-  m_Name: Text (TMP) (2)
+  m_Name: HomeScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2888,8 +2888,8 @@ MonoBehaviour:
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 6144
   m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
+  m_ConnectTimeoutMS: 500
+  m_MaxConnectAttempts: 30
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 
@@ -3206,7 +3206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1710274667
 RectTransform:
   m_ObjectHideFlags: 0

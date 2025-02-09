@@ -80,15 +80,19 @@ public class NetworkUI : NetworkBehaviour
     public void SetIpAddress()
     {
         ipAddress = ip.text;
-        if(ip.text.Length == 0)
-        {
-            errorText.text = "Please enter a Valid IP Address";
-            return;
-        }
+        CheckIPAddress();
         transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.ConnectionData.Address = ipAddress;
         Debug.Log(transport.ConnectionData.Address);
         Debug.Log(ipAddress);
+    }
+    void CheckIPAddress()
+    {
+        if(ipAddress.Length == 0)
+        {
+            errorText.text = "Please enter a Valid IP Address";
+            return;
+        }
     }
 
 }

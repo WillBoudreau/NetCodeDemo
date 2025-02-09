@@ -11,7 +11,11 @@ public class NetTrigger : MonoBehaviour
     public int homeScore = 0;
     public int awayScore = 0;
     public PuckBehaviour puck;
-
+    void Awake()
+    {
+        scoreTextHome = GameObject.Find("HomeScore").GetComponent<TextMeshProUGUI>();
+        scoreTextAway = GameObject.Find("AwayScore").GetComponent<TextMeshProUGUI>();
+    }
     void Start()
     {
         scoreTextHome.text = "Home: " + homeScore.ToString();

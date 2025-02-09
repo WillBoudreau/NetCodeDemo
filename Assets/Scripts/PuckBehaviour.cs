@@ -12,6 +12,7 @@ public class PuckBehaviour : NetworkBehaviour
     public Vector3 startPosition;
     public bool isMoving;
     private Rigidbody rb;
+    float minY = -10f;
 
     void Start()
     {
@@ -29,6 +30,7 @@ public class PuckBehaviour : NetworkBehaviour
 
     void Update()
     {
+        CheckPuck();
         rb.isKinematic = false;
         if (rb.velocity.magnitude > 0)
         {
@@ -70,5 +72,12 @@ public class PuckBehaviour : NetworkBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         transform.position = startPosition;
+    }
+    public void CheckPuck()
+    {
+        if (transform.position.y < minY)
+        {
+            ResetPuck();
+        }
     }
 }
