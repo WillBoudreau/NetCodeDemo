@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class PlayerMovement : NetworkBehaviour
 {
+    [Header("Class Calls")]
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
+    [Header("Player Stats")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private GameObject puck;
     [SerializeField] private float PlayerMinDistPuck;
+    [SerializeField] private bool isPaused;
     private PuckBehaviour puckScript;
 
     public override void OnNetworkSpawn()
     {
+        isPaused = false;
         if (IsOwner)
         {
             Vector3 spawnPosition = new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
@@ -23,10 +29,13 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Update()
     {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        uiManager = GameObject.FindObjectOfType<UIManager>();
         puck = GameObject.FindGameObjectWithTag("Puck");
         puckScript = GameObject.FindObjectOfType<PuckBehaviour>();
         MovePlayer();
         Shoot();
+        PlayerInputs();
     }
 
     void MovePlayer()
@@ -81,6 +90,21 @@ public class PlayerMovement : NetworkBehaviour
         if (IsOwner)
         {
             puckScript.ApplyForce(direction);
+        }
+    }
+    void PlayerInputs()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape) && !isPaused)
+        {
+            gameManager.PauseGame();
+            uiManager.LoadUI("PauseMenuUI");
+            isPaused = true;
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && isPaused)
+        {
+            gameManager.ResumeGame();
+            uiManager.LoadUI("GameUI");
+            isPaused = false;
         }
     }
 

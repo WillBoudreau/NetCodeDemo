@@ -34,4 +34,20 @@ public class GameManager : MonoBehaviour
         //Enable the camera
         mainCamera.enabled = true;
     }
+    /// <summary>
+    /// Pause the game
+    /// </summary>
+    public void PauseGame()
+    {
+        //Pause the game
+        Time.timeScale = 0;
+    }
+    /// <summary>
+    /// Unpause the game
+    /// </summary>
+    public void ResumeGame()
+    {
+        //Unpause the game
+        Time.timeScale = 1;
+    }
 }

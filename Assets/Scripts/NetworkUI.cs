@@ -18,6 +18,7 @@ public class NetworkUI : NetworkBehaviour
     [SerializeField] string ipAddress;
     [SerializeField] TextMeshProUGUI errorText;
     [SerializeField] UnityTransport transport;
+    public TMP_InputField playerName;
 
     private NetworkVariable<int> playersCount = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone);
 
@@ -54,7 +55,10 @@ public class NetworkUI : NetworkBehaviour
         {
             return;
         }
-        playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        else
+        {
+            playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        }
     }
     /* Gets the Ip Address of your connected network and
 	shows on the screen in order to let other players join
