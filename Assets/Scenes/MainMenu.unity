@@ -2297,6 +2297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 2087551197}
   uiManager: {fileID: 0}
+  puckBehaviour: {fileID: 0}
   homeScore:
     m_InternalValue: 0
   awayScore:
@@ -6637,7 +6638,7 @@ MonoBehaviour:
   m_MaxConnectAttempts: 30
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 
+    Address: 0.0.0.0
     Port: 7777
     ServerListenAddress: 0.0.0.0
   DebugSimulator:
