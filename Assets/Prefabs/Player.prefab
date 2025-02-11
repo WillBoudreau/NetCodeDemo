@@ -132,7 +132,7 @@ MonoBehaviour:
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
+  ActiveSceneSynchronization: 1
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
@@ -156,6 +156,7 @@ MonoBehaviour:
   puck: {fileID: 0}
   PlayerMinDistPuck: 5
   isPaused: 0
+  rb: {fileID: -8498365935157818711}
 --- !u!114 &5088739600153626682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,8 +240,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 3318217026121405691}
-  playerID:
-    m_InternalValue: 
+  networkUI: {fileID: 0}
+  playerRenderer: {fileID: 8109395776149440522}
 --- !u!1 &1379314413464219209
 GameObject:
   m_ObjectHideFlags: 0

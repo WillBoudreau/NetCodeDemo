@@ -14,11 +14,13 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private GameObject puck;
     [SerializeField] private float PlayerMinDistPuck;
     [SerializeField] private bool isPaused;
+    [SerializeField] private Rigidbody rb;
     private PuckBehaviour puckScript;
 
     public override void OnNetworkSpawn()
     {
         isPaused = false;
+        rb = GetComponent<Rigidbody>();
         if (IsOwner)
         {
             Vector3 spawnPosition = new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
@@ -33,6 +35,7 @@ public class PlayerMovement : NetworkBehaviour
         uiManager = GameObject.FindObjectOfType<UIManager>();
         puck = GameObject.FindGameObjectWithTag("Puck");
         puckScript = GameObject.FindObjectOfType<PuckBehaviour>();
+        rb.isKinematic = false;
         MovePlayer();
         Shoot();
         PlayerInputs();

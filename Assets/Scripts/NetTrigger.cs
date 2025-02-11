@@ -2,49 +2,109 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.Netcode;
 
-public class NetTrigger : MonoBehaviour
+public class NetTrigger : NetworkBehaviour
 {
     public TextMeshProUGUI scoreTextHome;
     public TextMeshProUGUI scoreTextAway;
     public AudioSource ScoreSound;
-    public int homeScore = 0;
-    public int awayScore = 0;
+    public NetworkVariable<int> homeScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> awayScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public PuckBehaviour puck;
+
     void Awake()
     {
-        scoreTextHome = GameObject.Find("HomeScore").GetComponent<TextMeshProUGUI>();
-        scoreTextAway = GameObject.Find("AwayScore").GetComponent<TextMeshProUGUI>();
+        GameObject homeScoreObject = GameObject.Find("HomeScore");
+        if (homeScoreObject != null)
+        {
+            scoreTextHome = homeScoreObject.GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
+            Debug.LogError("HomeScore GameObject not found");
+        }
+        ScoreSound = GetComponent<AudioSource>();
+        {
+            Debug.LogError("AudioSource component not found on this GameObject.");
+        }
+
+        GameObject awayScoreObject = GameObject.Find("AwayScore");
+        if (awayScoreObject != null)
+        {
+            scoreTextAway = awayScoreObject.GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
+            Debug.LogError("AwayScore GameObject not found");
+        }
     }
+
     void Start()
     {
-        scoreTextHome.text = "Home: " + homeScore.ToString();
-        scoreTextAway.text = "Away: " + awayScore.ToString();
+        scoreTextHome.text = "Home: " + homeScore.Value.ToString();
+        scoreTextAway.text = "Away: " + awayScore.Value.ToString();
         ScoreSound = GetComponent<AudioSource>();
-    }
 
+        OnNetworkSpawn();
+    }
     void Update()
     {
-        puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
+        GameObject homeScoreObject = GameObject.Find("HomeScore");
+        GameObject awayScoreObject = GameObject.Find("AwayScore");
     }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
 
+        homeScore.OnValueChanged += OnHomeScoreChanged;
+        awayScore.OnValueChanged += OnAwayScoreChanged;
+
+        OnHomeScoreChanged(0, homeScore.Value);
+        OnAwayScoreChanged(0, awayScore.Value);
+
+        puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
+        GameObject puckObject = GameObject.FindWithTag("Puck");
+        if (puckObject != null)
+        {
+            puck = puckObject.GetComponent<PuckBehaviour>();
+        }
+        else
+        {
+            Debug.LogError("Puck GameObject not found");
+        }
+    }
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Puck" && this.gameObject.tag == "HomeNet")
         {
-            puck.ResetPuck();
-            ScoreSound.Play();
-            awayScore++;
-            scoreTextAway.text = "Away: " + awayScore.ToString();
-            Debug.Log(awayScore);
+            UpdateAwayScoreServerRpc();
         }
         else if (other.gameObject.tag == "Puck" && this.gameObject.tag == "AwayNet")
         {
-            puck.ResetPuck();
-            ScoreSound.Play();
-            homeScore++;
-            scoreTextHome.text = "Home: " + homeScore.ToString();
-            Debug.Log(homeScore);
+            UpdateHomeScoreServerRpc();
         }
+        puck.ResetPuck();
+    }
+
+    [ServerRpc]
+    private void UpdateHomeScoreServerRpc()
+    {
+        homeScore.Value++;
+    }
+
+    [ServerRpc]
+    private void UpdateAwayScoreServerRpc()
+    {
+        awayScore.Value++;
+    }
+
+    private void OnHomeScoreChanged(int oldValue, int newValue)
+    {
+        scoreTextHome.text = $"Home: {newValue}";
+    }
+    private void OnAwayScoreChanged(int oldValue, int newValue)
+    {
+        scoreTextAway.text = $"Away: {newValue}";
     }
 }

@@ -3741,8 +3741,10 @@ MonoBehaviour:
   scoreTextHome: {fileID: 22695773}
   scoreTextAway: {fileID: 1335606258}
   ScoreSound: {fileID: 730605547}
-  homeScore: 0
-  awayScore: 0
+  homeScore:
+    m_InternalValue: 0
+  awayScore:
+    m_InternalValue: 0
   puck: {fileID: 0}
 --- !u!82 &730605547 stripped
 AudioSource:
@@ -4994,6 +4996,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6254223689815126183, guid: 11d1112a358dc9f4b93477e310f696ce, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2343742071
+      objectReference: {fileID: 0}
     - target: {fileID: 6492519471975484664, guid: 11d1112a358dc9f4b93477e310f696ce, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -5451,6 +5457,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &895092957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 895092960}
+  m_Layer: 0
+  m_Name: NetworkUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &895092960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895092957}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.2, y: -0.34000003, z: 0.11337042}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &905265667
 GameObject:
   m_ObjectHideFlags: 0
@@ -9412,7 +9449,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelManager: {fileID: 0}
+  uiManager: {fileID: 0}
   playersCountText: {fileID: 581060278}
+  playerName: {fileID: 0}
   ipAddressText: {fileID: 1129681168}
   ip: {fileID: 2004204179}
   ipAddress: 
@@ -10241,8 +10280,10 @@ MonoBehaviour:
   scoreTextHome: {fileID: 22695773}
   scoreTextAway: {fileID: 1335606258}
   ScoreSound: {fileID: 1598620578}
-  homeScore: 0
-  awayScore: 0
+  homeScore:
+    m_InternalValue: 0
+  awayScore:
+    m_InternalValue: 0
   puck: {fileID: 0}
 --- !u!82 &1598620578 stripped
 AudioSource:
@@ -11928,6 +11969,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6254223689815126183, guid: 11d1112a358dc9f4b93477e310f696ce, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 947960970
+      objectReference: {fileID: 0}
     - target: {fileID: 6492519471975484664, guid: 11d1112a358dc9f4b93477e310f696ce, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -11973,3 +12018,4 @@ SceneRoots:
   - {fileID: 672800528}
   - {fileID: 752986215}
   - {fileID: 1048965254}
+  - {fileID: 895092960}

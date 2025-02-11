@@ -19,6 +19,4 @@ public class PlayerSettings : NetworkBehaviour
             playerName.text = networkUI.playerName.text;
         }
     }
-
-
 }
