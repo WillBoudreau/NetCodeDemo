@@ -13,7 +13,7 @@ public class PlayerSettings : NetworkBehaviour
     {
         networkUI = FindObjectOfType<NetworkUI>();//Find the network UI
         //If the player is the local player
-        if(IsLocalPlayer)
+        if (IsLocalPlayer)
         {
             //Set the player's name to the name input field
             playerName.text = networkUI.playerName.text;

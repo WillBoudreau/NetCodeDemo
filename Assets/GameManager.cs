@@ -7,6 +7,7 @@ public class GameManager : NetworkBehaviour
 {
     [SerializeField] private Camera mainCamera; // The main camera
     [SerializeField] private UIManager uiManager; // The UI Manager
+    [SerializeField] private PuckBehaviour puckBehaviour;// Puck behavior
     public NetworkVariable<int> homeScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> awayScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -28,14 +29,16 @@ public class GameManager : NetworkBehaviour
 
     public void WinGame()
     {
-        if (homeScore.Value == homeScoreMaxValue)
+        if (homeScore.Value >= homeScoreMaxValue)
         {
+            homeScore.Value = homeScoreMaxValue;
             uiManager.LoadUI("WinUI");
             uiManager.winText.text = "Home Team Wins!";
             uiManager.goalText.text = "Final Score: " + homeScore.Value + " - " + awayScore.Value;
         }
-        else if (awayScore.Value == awayScoreMaxValue)
+        else if (awayScore.Value >= awayScoreMaxValue)
         {
+            awayScore.Value = awayScoreMaxValue;
             uiManager.LoadUI("WinUI");
             uiManager.winText.text = "Away Team Wins!";
             uiManager.goalText.text = "Final Score: " + homeScore.Value + " - " + awayScore.Value;
