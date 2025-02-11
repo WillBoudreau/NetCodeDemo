@@ -29,7 +29,7 @@ public class NetworkUI : NetworkBehaviour
         levelManager = FindObjectOfType<LevelManager>();
         uiManager = FindObjectOfType<UIManager>();
         errorText.text = "";
-        if (IsClient || IsServer || IsHost)
+        if (IsClient || IsServer)
         {
             NetworkManager.Shutdown();
         }
@@ -53,12 +53,12 @@ public class NetworkUI : NetworkBehaviour
 
     void Update()
     {
-        playersCountText.text = $"Players: {playersCount.Value}";
-        if (IsServer)
-        {
-            playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
-            UpdatePlayersCountServerRPC(playersCount.Value);
-        }
+        //playersCountText.text = $"Players: {playersCount.Value}";
+        //if (IsServer)
+        //{
+        //    playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        //    UpdatePlayersCountServerRPC(playersCount.Value);
+        //}
     }
     /* Gets the Ip Address of your connected network and
     shows on the screen in order to let other players join
@@ -84,18 +84,10 @@ public class NetworkUI : NetworkBehaviour
     public void SetIpAddress()
     {
         ipAddress = ip.text;
-            transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.ConnectionData.Address = ipAddress;
-            ipAddressText.text = "IP: " + ipAddress;
-            uiManager.LoadUI("GameUI");
-        //if (CheckIPAddress())
-        //{
-        //}
-        //else if (CheckIPAddress() == false)
-        //{
-        //    uiManager.LoadUI("EnterIPUI");
-        //    return;
-        //}
+        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.ConnectionData.Address = ipAddress;
+        ipAddressText.text = "IP: " + ipAddress;
+        uiManager.LoadUI("GameUI");
         Debug.Log(transport.ConnectionData.Address);
         Debug.Log(ipAddress);
     }
