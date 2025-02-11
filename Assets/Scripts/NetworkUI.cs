@@ -23,7 +23,7 @@ public class NetworkUI : NetworkBehaviour
     [SerializeField] TextMeshProUGUI errorText;
     [SerializeField] UnityTransport transport;
 
-    private NetworkVariable<int> playersCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<int> playersCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     void Awake()
     {
         levelManager = FindObjectOfType<LevelManager>();
@@ -84,18 +84,18 @@ public class NetworkUI : NetworkBehaviour
     public void SetIpAddress()
     {
         ipAddress = ip.text;
-        if (CheckIPAddress())
-        {
             transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.ConnectionData.Address = ipAddress;
             ipAddressText.text = "IP: " + ipAddress;
             uiManager.LoadUI("GameUI");
-        }
-        else if (CheckIPAddress() == false)
-        {
-            uiManager.LoadUI("EnterIPUI");
-            return;
-        }
+        //if (CheckIPAddress())
+        //{
+        //}
+        //else if (CheckIPAddress() == false)
+        //{
+        //    uiManager.LoadUI("EnterIPUI");
+        //    return;
+        //}
         Debug.Log(transport.ConnectionData.Address);
         Debug.Log(ipAddress);
     }

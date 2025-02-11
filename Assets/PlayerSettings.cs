@@ -19,4 +19,14 @@ public class PlayerSettings : NetworkBehaviour
             playerName.text = networkUI.playerName.text;
         }
     }
+    [ServerRpc]
+    public void UpdateNameTagServerRPC()
+    {
+
+    }
+    [ClientRpc]
+    public void UpdateNameTagClientRPC()
+    {
+
+    }
 }
