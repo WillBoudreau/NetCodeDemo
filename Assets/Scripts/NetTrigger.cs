@@ -6,15 +6,15 @@ using Unity.Netcode;
 
 public class NetTrigger : NetworkBehaviour
 {
+    public GameManager gameManager;
     public TextMeshProUGUI scoreTextHome;
     public TextMeshProUGUI scoreTextAway;
-    public AudioSource ScoreSound;
-    public NetworkVariable<int> homeScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public NetworkVariable<int> awayScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public PuckBehaviour puck;
 
     void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
+
         GameObject homeScoreObject = GameObject.Find("HomeScore");
         if (homeScoreObject != null)
         {
@@ -24,11 +24,6 @@ public class NetTrigger : NetworkBehaviour
         {
             Debug.LogError("HomeScore GameObject not found");
         }
-        ScoreSound = GetComponent<AudioSource>();
-        {
-            Debug.LogError("AudioSource component not found on this GameObject.");
-        }
-
         GameObject awayScoreObject = GameObject.Find("AwayScore");
         if (awayScoreObject != null)
         {
@@ -42,9 +37,8 @@ public class NetTrigger : NetworkBehaviour
 
     void Start()
     {
-        scoreTextHome.text = "Home: " + homeScore.Value.ToString();
-        scoreTextAway.text = "Away: " + awayScore.Value.ToString();
-        ScoreSound = GetComponent<AudioSource>();
+        scoreTextHome.text = "Home: " + gameManager.homeScore.Value.ToString();
+        scoreTextAway.text = "Away: " + gameManager.awayScore.Value.ToString();
 
         OnNetworkSpawn();
     }
@@ -57,11 +51,11 @@ public class NetTrigger : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        homeScore.OnValueChanged += OnHomeScoreChanged;
-        awayScore.OnValueChanged += OnAwayScoreChanged;
+        gameManager.homeScore.OnValueChanged += OnHomeScoreChanged;
+        gameManager.awayScore.OnValueChanged += OnAwayScoreChanged;
 
-        OnHomeScoreChanged(0, homeScore.Value);
-        OnAwayScoreChanged(0, awayScore.Value);
+        OnHomeScoreChanged(0, gameManager.homeScore.Value);
+        OnAwayScoreChanged(0, gameManager.awayScore.Value);
 
         puck = GameObject.FindWithTag("Puck").GetComponent<PuckBehaviour>();
         GameObject puckObject = GameObject.FindWithTag("Puck");
@@ -87,16 +81,32 @@ public class NetTrigger : NetworkBehaviour
         puck.ResetPuck();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void UpdateHomeScoreServerRpc()
     {
-        homeScore.Value++;
+        gameManager.homeScore.Value++;
+        UpdateHomeScoreClientRpc(gameManager.homeScore.Value);
+        Debug.Log("Home Score: " + gameManager.homeScore.Value);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void UpdateAwayScoreServerRpc()
     {
-        awayScore.Value++;
+        gameManager.awayScore.Value++;
+        UpdateAwayScoreClientRpc(gameManager.awayScore.Value);
+        Debug.Log("Away Score: " + gameManager.awayScore.Value);
+    }
+    [ClientRpc]
+    void UpdateHomeScoreClientRpc(int newValue)
+    {
+        gameManager.homeScore.Value = newValue;
+        Debug.Log("Home Score: " + gameManager.homeScore.Value);
+    }
+    [ClientRpc]
+    void UpdateAwayScoreClientRpc(int newValue)
+    {
+        gameManager.awayScore.Value = newValue;
+        Debug.Log("Away Score: " + gameManager.awayScore.Value);
     }
 
     private void OnHomeScoreChanged(int oldValue, int newValue)
