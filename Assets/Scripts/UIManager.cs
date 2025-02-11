@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] UIs;//The UI objects
+    [Header("Win Stats")]
+    public TextMeshProUGUI winText;
+    public TextMeshProUGUI goalText;
     void Start()
     {
        SetAllFalse();

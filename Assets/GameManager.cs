@@ -6,6 +6,7 @@ using Unity.Netcode;
 public class GameManager : NetworkBehaviour
 {
     [SerializeField] private Camera mainCamera; // The main camera
+    [SerializeField] private UIManager uiManager; // The UI Manager
     public NetworkVariable<int> homeScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> awayScore = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -15,6 +16,11 @@ public class GameManager : NetworkBehaviour
     /// The instance of the GameManager
     /// </summary>
     public static GameManager instance;
+
+    void Start()
+    {
+        uiManager = FindObjectOfType<UIManager>();
+    }
     void Update()
     {
         WinGame();
@@ -24,11 +30,15 @@ public class GameManager : NetworkBehaviour
     {
         if (homeScore.Value == homeScoreMaxValue)
         {
-            Debug.Log("Home Team Wins!");
+            uiManager.LoadUI("WinUI");
+            uiManager.winText.text = "Home Team Wins!";
+            uiManager.goalText.text = "Final Score: " + homeScore.Value + " - " + awayScore.Value;
         }
         else if (awayScore.Value == awayScoreMaxValue)
         {
-            Debug.Log("Away Team Wins!");
+            uiManager.LoadUI("WinUI");
+            uiManager.winText.text = "Away Team Wins!";
+            uiManager.goalText.text = "Final Score: " + homeScore.Value + " - " + awayScore.Value;
         }
     }
 

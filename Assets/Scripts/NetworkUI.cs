@@ -57,6 +57,7 @@ public class NetworkUI : NetworkBehaviour
         if (IsServer)
         {
             playersCount.Value = NetworkManager.Singleton.ConnectedClients.Count;
+            UpdatePlayersCountServerRPC(playersCount.Value);
         }
     }
     /* Gets the Ip Address of your connected network and
@@ -110,5 +111,16 @@ public class NetworkUI : NetworkBehaviour
             errorText.text = "";
             return true;
         }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayersCountServerRPC(int count)
+    {
+        playersCount.Value = count;
+        UpdatePlayersCountClientRPC(playersCount.Value);
+    }
+    [ClientRpc]
+    public void UpdatePlayersCountClientRPC(int count)
+    {
+        playersCount.Value = count;
     }
 }
